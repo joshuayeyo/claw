@@ -30,7 +30,7 @@ const Board = () => {
                 <ItemsContainer>
                     {/* 뽑아야 할 아이템들 정렬; 16개의 칸으로 구성 */}
                     {shuffledPrizes.map((item) => (
-                        <Item key={item.id} name={item.name} image={item.image} />
+                        <Item id={item.id} name={item.name} image={item.image} />
                     ))}
                 </ItemsContainer>
                 <ClawContainer>

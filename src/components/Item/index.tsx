@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 import { Prize } from "@/types/index";
 
-const Item = ({ name, image }: Prize) => {
+const Item = ({ id, name, image }: Prize) => {
+
     return (
-        <ItemWrapper>
+        <ItemWrapper data-id={id}>
             <img src={image} alt={name} />
             <span>{name}</span>
         </ItemWrapper>
