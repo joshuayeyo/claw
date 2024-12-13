@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 import styled from "@emotion/styled"
 import Header from "@/components/Header"
 import Board from "@/components/Board"
