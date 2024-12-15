@@ -4,15 +4,23 @@ type Direction = "up" | "down" | "left" | "right" | "reset";
 
 const useClawControl = () => {
     const [position, setPosition] = useState({ top: 90, left: 3 });
+    const [remainingMoves, setRemainingMoves] = useState(5); 
     const moveInterval = useRef<NodeJS.Timeout | null>(null);
 
     const startMoving = (direction: Direction) => {
         const clawXSpeed = 1;
         const clawYSpeed = 1;
 
+        if (remainingMoves <= 0) {
+            return;
+        }
+        
+        setRemainingMoves((prevCount) => prevCount - 1); // 움직일 때마다 횟수 감소
+
         stopMoving();   // restart 시 claw 위치 고정
         if (direction === "reset") {
             setPosition({ top: 90, left: 3});
+            setRemainingMoves(5);
             return;
         }
         moveInterval.current = setInterval(() => {
@@ -48,7 +56,7 @@ const useClawControl = () => {
         }
     };
 
-return { position, startMoving, stopMoving };
+return { position, startMoving, stopMoving, remainingMoves };
 };
 
 export default useClawControl;

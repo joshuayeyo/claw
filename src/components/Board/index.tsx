@@ -9,12 +9,13 @@ import useClawControl from "@/hooks/useClawControl";
 import { PrizeWithPosition } from "@/types";
 import ResultModal from "../modals/Result";
 import usePickItem from "@/hooks/usePickItem";
+import { Typography } from "@mui/material";
 
 const Board = () => {
     // 정렬을 위해 아이템 랜덤하게 섞어야 합니다.
     const [shuffledPrizes, setShuffledPrizes] = useState<PrizeWithPosition[]>([]);
     const [gameStarted, setGameStarted] = useState(false);
-    const {position, startMoving, stopMoving } = useClawControl();
+    const {position, startMoving, stopMoving, remainingMoves } = useClawControl();
     const { pickedItem, showResult, pickItem, reset } = usePickItem();
     const padding = 20;
     // 게임 시작 상태 체크
@@ -85,6 +86,12 @@ const Board = () => {
                 </ItemsContainer>
                 { gameStarted && <Claw position={position} padding={padding}/> }
                 { pickedItem && <ResultModal isModalOpen={showResult} itemName={pickedItem.name} itemImage={pickedItem.image} onReStart={reStartGame} /> }
+                { remainingMoves <= 0 && <ResultModal isModalOpen={true} itemName="소진" itemImage="" onReStart={reStartGame} /> }
+                <StatusContainer>
+                    <Typography id="game-start-modal" variant="h5" component="h3" color="red">
+                            남은 횟수: {remainingMoves}
+                    </Typography>
+                </StatusContainer>
             </PlayGround>
         </Wrapper>
     )
@@ -121,4 +128,12 @@ const ItemsContainer = styled.div`
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
+`
+
+const StatusContainer = styled.div`
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 `
