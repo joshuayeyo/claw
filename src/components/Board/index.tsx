@@ -6,14 +6,17 @@ import Claw from "@/components/Claw";
 import GameStartModal from "../modals/GameStart";
 import { useSpeechControl } from "@/hooks/useSpeechControl";
 import useClawControl from "@/hooks/useClawControl";
+import { PrizeWithPosition } from "@/types";
+import ResultModal from "../modals/Result";
+import usePickItem from "@/hooks/usePickItem";
 
 const Board = () => {
     // 정렬을 위해 아이템 랜덤하게 섞어야 합니다.
-    const [shuffledPrizes, setShuffledPrizes] = useState<typeof prizes>([]);
+    const [shuffledPrizes, setShuffledPrizes] = useState<PrizeWithPosition[]>([]);
     const [gameStarted, setGameStarted] = useState(false);
-
-    const { position, startMoving, stopMoving } = useClawControl();
-
+    const {position, startMoving, stopMoving } = useClawControl();
+    const { pickedItem, showResult, pickItem, reset } = usePickItem();
+    const padding = 20;
     // 게임 시작 상태 체크
     const startGame = () => {
         if (!gameStarted) {
@@ -21,20 +24,23 @@ const Board = () => {
         }
     }
 
-    const pickItem = () => {
-        console.log("아이템을 뽑습니다.")
-        // 세부 로직 구현 예정
+    const reStartGame = () => {
+        setGameStarted(false);
+        setShuffledPrizes([]); 
+        startMoving("reset") // claw의 위치 초기화
+        reset();
     }
 
     // 음성인식 시작
     const { startListening } = useSpeechControl({
         onStart: startGame,
+        onRestart: reStartGame,
         onUp: () => startMoving("up"),
         onDown: () => startMoving("down"),
         onLeft: () => startMoving("left"),
         onRight: () => startMoving("right"),
         onStop: stopMoving,
-        onPick: pickItem,
+        onPick: () => pickItem(position, shuffledPrizes),
     });
 
     useEffect(() => {
@@ -47,16 +53,20 @@ const Board = () => {
         if (shuffledPrizes.length > 0) return;
 
         const getRandomPrizes = (items: typeof prizes, count: number) => {
-            const result: typeof items[number][] = [];
+            const result: Array<typeof items[number] & {x: number; y: number}> = [];
             for (let i = 0; i < count; i++) {
                 const randomIndex = Math.floor(Math.random() * items.length);
-                result.push(items[randomIndex]);
+                result.push({
+                    ...items[randomIndex],
+                    x: i%4,
+                    y: Math.floor(i / 4),
+                });
             }
             return result;
         };
 
         setShuffledPrizes(getRandomPrizes(prizes, 16));
-    }, [])
+    }, [shuffledPrizes.length])
 
     return(
         <Wrapper>
@@ -66,10 +76,15 @@ const Board = () => {
                 <ItemsContainer>
                     {/* 뽑아야 할 아이템들 정렬; 16개의 칸으로 구성 */}
                     {shuffledPrizes.map((item) => (
-                        <Item id={item.id} name={item.name} image={item.image} />
+                        <Item 
+                        id={item.id} 
+                        name={item.name} 
+                        image={item.image} 
+                        />
                     ))}
                 </ItemsContainer>
-                { gameStarted && <Claw position={position}/> }
+                { gameStarted && <Claw position={position} padding={padding}/> }
+                { pickedItem && <ResultModal isModalOpen={showResult} itemName={pickedItem.name} itemImage={pickedItem.image} onReStart={reStartGame} /> }
             </PlayGround>
         </Wrapper>
     )
