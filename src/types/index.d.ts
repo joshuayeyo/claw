@@ -5,3 +5,12 @@ export type Prize = {
 };
 
 export type ItemList = Prize[];
+
+export type PrizeWithPosition = Prize & { x: number, y: number };
+
+export type UsePickItemResult = {
+    pickedItem: PrizeWithPosition | null;
+    showResult: boolean;
+    pickItem: (position: { top: number; left: number}, shuffledPrizes: PrizeWithPosition[]) => void;
+    reset: () => void;
+}
