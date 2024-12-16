@@ -66,6 +66,7 @@ const ResultModal = ({ isModalOpen, itemImage, itemName, onReStart }: Props) => 
                         variant="outlined"
                         color="secondary"
                         onClick={() => window.open('https://github.com/joshuayeyo/claw', '_blank')} // 새 탭에서 열기
+                        sx={{ marginRight: 2 }}
                     >
                         Github
                     </Button>
