@@ -10,6 +10,7 @@ type Props = {
 
 const ResultModal = ({ isModalOpen, itemImage, itemName, onReStart }: Props) => {
     if (!isModalOpen) return null;
+    
 
     return (
         <Modal
@@ -32,10 +33,20 @@ const ResultModal = ({ isModalOpen, itemImage, itemName, onReStart }: Props) => 
                     outline: 'none',
                 }}
             >
-                <ItemImage src={itemImage} alt={itemName} />
-                <Typography id="game-start-modal" variant="h6" component="h3" color="blue">
-                        {itemName}을 뽑았습니다!
-                </Typography>
+                { itemName == "소진" ? (
+                    <>
+                        <Typography id="game-start-modal" variant="h6" component="h3" color="blue">
+                                횟수를 모두 소진하였습니다!
+                        </Typography>
+                    </>
+                ): (
+                    <>
+                        <ItemImage src={itemImage} alt={itemName} />
+                        <Typography id="game-start-modal" variant="h6" component="h3" color="blue">
+                                {itemName}을 뽑았습니다!
+                        </Typography>
+                    </>
+                )}
 
                 <Typography id="game-start-modal" variant="h6" component="h2">
                         게임을 다시하려면 아래 버튼을 누르거나, <br/> "다시 시작"이라고 말씀하세요!
@@ -55,6 +66,7 @@ const ResultModal = ({ isModalOpen, itemImage, itemName, onReStart }: Props) => 
                         variant="outlined"
                         color="secondary"
                         onClick={() => window.open('https://github.com/joshuayeyo/claw', '_blank')} // 새 탭에서 열기
+                        sx={{ marginRight: 2 }}
                     >
                         Github
                     </Button>
