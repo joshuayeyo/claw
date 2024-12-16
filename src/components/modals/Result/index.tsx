@@ -66,8 +66,16 @@ const ResultModal = ({ isModalOpen, itemImage, itemName, onReStart }: Props) => 
                         variant="outlined"
                         color="secondary"
                         onClick={() => window.open('https://github.com/joshuayeyo/claw', '_blank')} // 새 탭에서 열기
+                        sx={{ marginRight: 2 }}
                     >
                         Github
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="success"
+                        onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSdl1omI82t3y8dTDqr0W1idqxcO3cHq7WTyKoB7eltc46Bq_Q/viewform?usp=header', '_blank')}
+                    >
+                        설문조사
                     </Button>
                 </Box>
             </Box>
